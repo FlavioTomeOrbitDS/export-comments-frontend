@@ -78,28 +78,41 @@ export class MainService {
   }
   // In the component class
   endpoints2 = [
-    'https://www.youtube.com/watch?v=E-N3N9hQySo',
-    'https://www.youtube.com/watch?v=ltDMeiZomg8&ab_channel=JamilySantana',
-    'https://www.youtube.com/watch?v=_-BLzckI9tQ',
+    'https://www.youtube.com/watch?v=AwCPdZMfGaI',
+    'https://www.youtube.com/watch?v=mLSuIGiX0LE',
+    'https://www.youtube.com/watch?v=YW952Vlcx1o',
+    'https://www.youtube.com/watch?v=Hr10JmjB0RI',
+    'https://www.youtube.com/watch?v=fTy_X8ujfW4',
+    'https://www.youtube.com/watch?v=8tg2cnsrftk',
+    'https://www.youtube.com/watch?v=grkRMV5t0pg',
+    'https://www.youtube.com/watch?v=6XFmLsqjTHs',
+    'https://www.youtube.com/watch?v=_i_6dEkTorE',
+    // 'https://www.youtube.com/watch?v=bkHuHgLWOkE',
+    // 'https://www.youtube.com/watch?v=MuFMF4vjRiw',
+    // 'https://www.youtube.com/watch?v=oBFTwKKxscs',
+    // 'https://www.youtube.com/watch?v=29fOPudEPCI',
+    // 'https://www.youtube.com/watch?v=jVsn0RsgLks',
+    // 'https://www.youtube.com/watch?v=1Isj7gblGT0',
+    // 'https://www.youtube.com/watch?v=vwH0C6D1uec',
+    // 'https://www.youtube.com/watch?v=zFAfX9eEqvg',
+    // 'https://www.youtube.com/watch?v=KelorSGCFhs',
+    // 'https://www.youtube.com/watch?v=CKzCp7qqCts',
+    // 'https://www.youtube.com/watch?v=LMnwHBtaefI',
+    // 'https://www.youtube.com/watch?v=Yxxo6U6YgOc',
   ];
-
-
 
   public test() {
     let i = 0;
-    this.endpoints2.forEach(
-       (e) => {
-         setInterval(() => {
-           this.sendRequest(e);
-         }, i * 1000);
-         i++;
-       }
-    )
 
+    setInterval(() => {
+      if (i < this.endpoints2.length) {
+        this.sendRequest(this.endpoints2[i]);
+        i++;
+      }
+    }, 1000);
   }
 
   sendRequest(endpoint: string) {
-
     let json_data = { url: endpoint };
     this.httpClient
       .post<Exportlink>(
@@ -108,8 +121,19 @@ export class MainService {
       )
       .subscribe((response) => {
         //when the backend returns the endpoint, adds it to List
-        this.addEndpointsList(String(response.link));
+        //this.addEndpointsList(String(response.link));
         //console.log(response.link);
+        let json_data = { endpoint: response.link };
+        this.httpClient
+          .post('http://localhost:5000/api/downloadfiles', json_data, {
+            responseType: 'blob' as 'json',
+          })
+          .subscribe((response) => {
+            // handle the response from the endpoint
+            console.log('Download Realizado : ');
+            //downloads the reponse as a .xlsx file
+            this.downloadExcelFile(response, 'response.xlsx');
+          });
       });
   }
 }
