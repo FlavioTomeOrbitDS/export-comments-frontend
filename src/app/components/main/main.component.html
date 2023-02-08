@@ -1,8 +1,15 @@
 <p>main works!</p>
-
- <input type="file" (change)="onFileChange($event)" />
-
+<input type="file" (change)="onFileChange($event)" />
 <p></p>
-<button (click)="sendListToBackend()"> Enviar Lista</button>
+<ul>
+  <li *ngFor="let i of original_urls_list">{{ i }}</li>
+</ul>
+
+<button (click)="generateEndpoints()">Gerar Endpoints</button>
+<ul>
+  <li *ngFor="let i of endpointsList">{{ i }}</li>
+</ul>
 <p></p>
-<button (click)="sendRequestToEndpoints()"> Download!!</button>
+<button (click)="sendRequestToEndpoints()">Download!!</button>
+<p></p>
+<button (click)="teste()">TESTE</button>

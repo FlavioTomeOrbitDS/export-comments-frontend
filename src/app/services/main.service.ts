@@ -7,73 +7,65 @@ import { Exportlink } from '../models/exportlink';
   providedIn: 'root',
 })
 export class MainService {
-  //url = 'http://127.0.0.1:5000/api/getLink';
-  url =
-    'http://localhost:5000/api/teste?link=https://www.youtube.com/watch?v=mg7netw1JuM&t=8534s&ab_channel=GreenredProductions-RelaxingMusic';
-
-  Link = '';
   constructor(private httpClient: HttpClient) {}
 
-  getLink(): Observable<Exportlink> {
-    //get the downloadLink to the xlsx file
-    return this.httpClient.get<Exportlink>(this.url);
+  //List of Endponits returned by the API
+  private endpointsList = [''];
+
+  //Returns the List Items
+  public getEndpointList() {
+    return this.endpointsList;
+  }
+  //Add an Intem to the List
+  public addEndpointsList(endpoint: string) {
+    this.endpointsList.push(endpoint);
+  }
+  //If the first item of list == '', remove it
+  public removeFirstItemFromList() {
+    this.endpointsList = this.endpointsList.slice(1);
   }
 
-  getDownloadResponse(downloadLink: any): Observable<any> {
-    //return this.httpClient.get<Exportlink>(downloadLink);
-    return this.httpClient.get<any>('http://localhost:5000/api/teste2', {
-      responseType: 'blob' as 'json',
+  //Iterates with the url list to send each url to backend and return the endpoint to download the file
+  public generateEndpoints(url_list: string[]) {
+    url_list.forEach((url) => {
+      //creates the json with the url to send to backend
+      const json_data = {
+        url: url,
+      };
+
+      this.httpClient
+        .post<Exportlink>(
+          'http://localhost:5000/api/generateEndpoints',
+          json_data
+        )
+        .subscribe((response) => {
+          //when the backend returns the endpoint, adds it to List
+          this.addEndpointsList(String(response.link));
+          //console.log(response.link);
+        });
     });
   }
 
-  //send a list of url to backend and return a list of downloads url
-  sendData(url_list: any): Observable<Exportlink> {
-    const json_data = {
-      url_list: url_list,
-    };
-
-    return this.httpClient.post<Exportlink>(
-      'http://localhost:5000/api/getDownloadLinks',
-      json_data
-    );
-  }
-
-  //send a single endpoint to backend, and return the .xlsx file as blob
-  getLinksFromAPI(endpoint: string): Observable<any> {
-    const json_data = { dowloadLink: endpoint };
-    return this.httpClient.post<Exportlink>(
-      'http://localhost:5000/api/downloadFile',
-      json_data,
-      { responseType: 'blob' as 'json' }
-    );
-  }
-  //*********************************************************************** */
-  generateEndpoints(url: any): Observable<Exportlink> {
-    const json_data = {
-      url: url,
-    };
-    return this.httpClient.post<Exportlink>(
-      'http://localhost:5000/api/generateEndpoints',
-      json_data
-    );
-  }
-
-  sendRequestToEndpoints(endpoints: string[]) {
-    endpoints.forEach((endpoint) => {
-      let json_data = { endpoint: endpoint };
+  //Sends the endpoints to API to get the blob response to download the .xlsx file
+  public sendRequestToEndpoints() {
+    //Remove the first null item from the list
+    this.removeFirstItemFromList();
+    this.getEndpointList().forEach((ep) => {
+      let json_data = { endpoint: ep };
       this.httpClient
         .post('http://localhost:5000/api/downloadfiles', json_data, {
           responseType: 'blob' as 'json',
         })
         .subscribe((response) => {
           // handle the response from the endpoint
-          console.log(response);
+          console.log('Download Realizado : ' + ep);
+          //downloads the reponse as a .xlsx file
           this.downloadExcelFile(response, 'response.xlsx');
         });
     });
   }
 
-  downloadExcelFile(data: any, filename: string) {
+  private downloadExcelFile(data: any, filename: string) {
     const blob = new Blob([data], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
@@ -84,15 +76,40 @@ export class MainService {
     link.click();
     URL.revokeObjectURL(url);
   }
+  // In the component class
+  endpoints2 = [
+    'https://www.youtube.com/watch?v=E-N3N9hQySo',
+    'https://www.youtube.com/watch?v=ltDMeiZomg8&ab_channel=JamilySantana',
+    'https://www.youtube.com/watch?v=_-BLzckI9tQ',
+  ];
 
-  // //send a list of endpoints to backend, and return the .xlsx files as blob
-  // getLinksFromAPI(endpoints: string[]): Observable<any> {
-  //   //create an json with the endpoints list to send to backend
-  //   const json_data = { downloadLink: endpoints };
-  //   return this.httpClient.post<Exportlink>(
-  //     'http://localhost:5000/api/downloadFile',
-  //     json_data,
-  //     { responseType: 'blob' as 'json' }
-  //   );
-  // }
+
+
+  public test() {
+    let i = 0;
+    this.endpoints2.forEach(
+       (e) => {
+         setInterval(() => {
+           this.sendRequest(e);
+         }, i * 1000);
+         i++;
+       }
+    )
+
+  }
+
+  sendRequest(endpoint: string) {
+
+    let json_data = { url: endpoint };
+    this.httpClient
+      .post<Exportlink>(
+        'http://localhost:5000/api/generateEndpoints',
+        json_data
+      )
+      .subscribe((response) => {
+        //when the backend returns the endpoint, adds it to List
+        this.addEndpointsList(String(response.link));
+        //console.log(response.link);
+      });
+  }
 }
