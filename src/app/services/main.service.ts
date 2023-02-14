@@ -9,7 +9,8 @@ import { Exportlink } from '../models/exportlink';
 export class MainService {
   constructor(private httpClient: HttpClient) {}
 
-  url = 'https://pfizer-pulse.rj.r.appspot.com';
+  #url = 'https://pfizer-pulse.rj.r.appspot.com';
+  url = 'https://export-comments-backend-nylbyrwc2q-uc.a.run.app';
 
   //List of URL in the xlsx file passed by user
   original_urls_list = [''];
@@ -35,10 +36,7 @@ export class MainService {
     console.log('Gerando endpoints...');
     let json_data = { list_of_endpoints: this.original_urls_list };
     this.httpClient
-      .post<any>(
-        this.url+'/api/generateEndpointsFromList',
-        json_data
-      )
+      .post<any>(this.url + '/api/generateEndpointsFromList', json_data)
       .subscribe((response) => {
         this.endpointsList = response.download_url_list;
         console.log('Iniciando Downloads');
