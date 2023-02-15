@@ -9,7 +9,8 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+
+CMD ["ng", "serve","--port","4200","--host", "0.0.0.0"]
 
 # # Use an official Node.js runtime as a parent image
 # FROM node:16-slim
