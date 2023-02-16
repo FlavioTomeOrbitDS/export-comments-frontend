@@ -1,7 +1,9 @@
+import { MainComponent } from './../components/main/main.component';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, lastValueFrom } from 'rxjs';
 import { Exportlink } from '../models/exportlink';
+
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +35,16 @@ export class MainService {
     this.downloading = flag;
   }
 
+  private finishedOperation = false
+
+  public getFinishedOperation(){
+    return this.finishedOperation;
+  }
+
+  public setFinishedOperation(flag: boolean){
+    this.finishedOperation = flag
+  }
+
   //List of URL in the xlsx file passed by user
   original_urls_list = [''];
 
@@ -54,6 +66,7 @@ export class MainService {
 
   public sendRequestUsingList() {
     this.setExporting(true);
+     this.setFinishedOperation(false);
     console.log(`********INÌCIO: ${new Date().toString()}`);
     console.log('Gerando endpoints...');
     let json_data = { list_of_endpoints: this.original_urls_list };
@@ -71,7 +84,7 @@ export class MainService {
   public sendRequestToEndpoints() {
     //Remove the first null item from the list
     this.removeFirstItemFromList();
-    this.getEndpointList().forEach((ep) => {
+    this.getEndpointList().forEach((ep, index) => {
       this.setDownloading(true);
       let json_data = { endpoint: ep };
       this.httpClient
@@ -79,13 +92,37 @@ export class MainService {
           responseType: 'blob' as 'json',
         })
         .subscribe((response) => {
-          console.log(response)
+          console.log(response);
           // handle the response from the endpoint
           console.log('Download Realizado : ' + ep);
           //downloads the reponse as a .xlsx file
           this.downloadExcelFile(response, 'response.xlsx');
           console.log(`TIME: ${new Date().toString()}`);
+          if (index == this.getEndpointList().length - 1)
+            this.setDownloading(false);
+            this.setFinishedOperation(true)
         });
+    });
+  }
+
+  public sendRequestToEndpointsPromisseAll() {
+    //Remove the first null item from the list
+    this.removeFirstItemFromList();
+    console.log('fazendo download da poha toda !');
+
+    Promise.all(
+      this.getEndpointList().map((ep) => {
+        let json_data = { endpoint: ep };
+
+        this.httpClient.post(this.url + '/api/downloadfiles', json_data, {
+          responseType: 'blob' as 'json',
+        });
+      })
+    ).then((response) => {
+      console.log(response);
+      // handle the response from the endpoint
+      //downloads the reponse as a .xlsx file
+      this.downloadExcelFile(response, 'response.xlsx');
     });
   }
 

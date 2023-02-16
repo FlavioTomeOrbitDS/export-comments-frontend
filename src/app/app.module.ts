@@ -1,3 +1,4 @@
+import { MainService } from './services/main.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -19,7 +20,7 @@ import { DownloadComponent } from './components/download/download.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [MainService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

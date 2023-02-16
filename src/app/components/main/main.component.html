@@ -59,6 +59,11 @@
     <h4>Fazendo Downloads....</h4>
     </ng-template
   >
+  <ng-template [ngIf]="getFinishedOperation()"
+    >
+    <h4>Operação Finalizada!!</h4>
+    </ng-template
+  >
 
   <!-- Button trigger modal -->
 

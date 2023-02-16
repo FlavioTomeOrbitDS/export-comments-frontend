@@ -19,12 +19,16 @@ export class MainComponent implements OnInit {
 
   modalMessage = '';
 
-  getExporting(){
-    return this.mainService.getExporting()
+  getExporting() {
+    return this.mainService.getExporting();
   }
 
-  getDownloading(){
-    return this.mainService.getDownloading()
+  getDownloading() {
+    return this.mainService.getDownloading();
+  }
+
+  getFinishedOperation(){
+    return this.mainService.getFinishedOperation();
   }
 
   showModal(message: string) {
