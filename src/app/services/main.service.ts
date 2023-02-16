@@ -9,8 +9,29 @@ import { Exportlink } from '../models/exportlink';
 export class MainService {
   constructor(private httpClient: HttpClient) {}
 
-  #url = 'https://pfizer-pulse.rj.r.appspot.com';
-  url = 'https://export-comments-backend-nylbyrwc2q-uc.a.run.app';
+  //url = 'https://pfizer-pulse.rj.r.appspot.com';
+  //url = 'https://export-comments-backend-nylbyrwc2q-uc.a.run.app';
+  url = 'http://127.0.0.1:5000';
+
+  private exporting = false;
+
+  public getExporting() {
+    return this.exporting;
+  }
+
+  public setExporting(flag: boolean) {
+    this.exporting = flag;
+  }
+
+  private downloading = false;
+
+  public getDownloading() {
+    return this.downloading;
+  }
+
+  public setDownloading(flag: boolean) {
+    this.downloading = flag;
+  }
 
   //List of URL in the xlsx file passed by user
   original_urls_list = [''];
@@ -32,6 +53,7 @@ export class MainService {
   }
 
   public sendRequestUsingList() {
+    this.setExporting(true);
     console.log(`********INÌCIO: ${new Date().toString()}`);
     console.log('Gerando endpoints...');
     let json_data = { list_of_endpoints: this.original_urls_list };
@@ -41,6 +63,7 @@ export class MainService {
         this.endpointsList = response.download_url_list;
         console.log('Iniciando Downloads');
         this.sendRequestToEndpoints();
+        this.setExporting(false);
       });
   }
 
@@ -49,12 +72,14 @@ export class MainService {
     //Remove the first null item from the list
     this.removeFirstItemFromList();
     this.getEndpointList().forEach((ep) => {
+      this.setDownloading(true);
       let json_data = { endpoint: ep };
       this.httpClient
         .post(this.url + '/api/downloadfiles', json_data, {
           responseType: 'blob' as 'json',
         })
         .subscribe((response) => {
+          console.log(response)
           // handle the response from the endpoint
           console.log('Download Realizado : ' + ep);
           //downloads the reponse as a .xlsx file

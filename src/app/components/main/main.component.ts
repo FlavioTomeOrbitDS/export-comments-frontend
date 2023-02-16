@@ -1,7 +1,6 @@
 import { MainService } from './../../services/main.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as XLSX from 'xlsx';
-import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-main',
@@ -9,7 +8,35 @@ import { stringify } from 'querystring';
   styleUrls: ['./main.component.css'],
 })
 export class MainComponent implements OnInit {
-  constructor(private mainService: MainService) {}
+  constructor(private mainService: MainService) {
+    this.mainService.setExporting(false);
+  }
+
+  @ViewChild('myButton')
+  myButton!: ElementRef<HTMLElement>;
+  @ViewChild('myCloseButton')
+  myCloseButton!: ElementRef<HTMLElement>;
+
+  modalMessage = '';
+
+  getExporting(){
+    return this.mainService.getExporting()
+  }
+
+  getDownloading(){
+    return this.mainService.getDownloading()
+  }
+
+  showModal(message: string) {
+    this.modalMessage = message;
+    let el: HTMLElement = this.myButton?.nativeElement;
+    el.click();
+  }
+
+  closeModal() {
+    let el: HTMLElement = this.myCloseButton?.nativeElement;
+    el.click();
+  }
 
   original_urls_list = this.mainService.original_urls_list;
 
@@ -18,8 +45,16 @@ export class MainComponent implements OnInit {
 
   //sends the url list main service function that send to the backend and generates the endpoints
   sendRequestUsingList() {
-    console.log('criando arquivos de download no servidor da api');
-    this.mainService.sendRequestUsingList();
+    if (this.original_urls_list.length == 1) {
+      this.showModal('Faça o upload da lista de links!!');
+    } else {
+      this.showModal(
+        'Exportando Comentários! Essa operação pode demorar vários minutos'
+      );
+      //this.mainService.setExporting(true);
+      console.log('criando arquivos de download no servidor da api');
+      this.mainService.sendRequestUsingList();
+    }
   }
 
   //Send the requests to Endpoints List to download the files from API
@@ -53,6 +88,8 @@ export class MainComponent implements OnInit {
       this.mainService.original_urls_list =
         this.mainService.original_urls_list.slice(1);
       console.log(this.mainService.original_urls_list);
+      let tam = this.original_urls_list.length;
+      this.showModal('Foram carregados ' + String(tam - 1) + ' Links!');
     };
     reader.readAsBinaryString(target.files[0]);
   }
@@ -61,7 +98,5 @@ export class MainComponent implements OnInit {
     //this.mainService.test()
     this.mainService.sendRequestUsingList();
   }
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 }

@@ -7,6 +7,7 @@ import { MainComponent } from './components/main/main.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DownloadComponent } from './components/download/download.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,

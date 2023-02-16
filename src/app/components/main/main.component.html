@@ -1,11 +1,116 @@
-<p>main works!</p>
-<input type="file" (change)="onFileChange($event)" />
-<p></p>
-<ul>
-  <li *ngFor="let i of original_urls_list">{{ i }}</li>
-</ul>
+<nav class="navbar bg-dark" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand">Navbar</a>
+    <form class="d-flex" role="search">
+      <input
+        class="form-control me-2"
+        type="search"
+        placeholder="Search"
+        aria-label="Search"
+      />
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<div
+  class="container"
+  style="
+    padding-top: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-radius: 20px;
+  "
+>
+  <h1>Orbit Export Comments</h1>
+  <br />
+  <button
+    type="button"
+    class="btn btn-primary"
+    onclick="document.getElementById('upload_input').click()"
+  >
+    Upload de lista
+  </button>
+  <input
+    type="file"
+    id="upload_input"
+    (change)="onFileChange($event)"
+    style="display: none"
+  />
+  <p></p>
 
-<button (click)="sendRequestUsingList()">Go!</button>
-<ul>
-  <li *ngFor="let i of endpointsList">{{ i }}</li>
-</ul>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="sendRequestUsingList()"
+  >
+    Exportar Comentários!
+  </button>
+
+  <ng-template [ngIf]="getExporting()"
+    >
+    <h4>Exportando....</h4>
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div></ng-template
+  >
+
+  <ng-template [ngIf]="getDownloading()"
+    >
+    <h4>Fazendo Downloads....</h4>
+    </ng-template
+  >
+
+  <!-- Button trigger modal -->
+
+  <button
+    type="button"
+    class="btn btn-primary"
+    id="myButton"
+    #myButton
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+    style="display: none"
+  >
+    Launch demo modal
+  </button>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    data-keyboard="false"
+    data-backdrop="static"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Antenção!</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body d-block">
+          {{ modalMessage }}
+          <br />
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            #myCloseButton
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br />
+</div>
