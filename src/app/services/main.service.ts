@@ -4,7 +4,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, forkJoin, lastValueFrom } from 'rxjs';
 import { Exportlink } from '../models/exportlink';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -12,9 +11,9 @@ export class MainService {
   constructor(private httpClient: HttpClient) {}
 
   //url = 'https://pfizer-pulse.rj.r.appspot.com';
-  //url = 'https://export-comments-backend-nylbyrwc2q-uc.a.run.app';
-  url = 'http://127.0.0.1:5000';
-
+  url = 'https://export-comments-backend-nylbyrwc2q-uc.a.run.app';
+  //url = 'http://127.0.0.1:5000';
+  /************************************************************************** */
   private exporting = false;
 
   public getExporting() {
@@ -24,7 +23,7 @@ export class MainService {
   public setExporting(flag: boolean) {
     this.exporting = flag;
   }
-
+  /************************************************************************** */
   private downloading = false;
 
   public getDownloading() {
@@ -34,20 +33,37 @@ export class MainService {
   public setDownloading(flag: boolean) {
     this.downloading = flag;
   }
+  /************************************************************************** */
+  private finishedOperation = false;
 
-  private finishedOperation = false
-
-  public getFinishedOperation(){
+  public getFinishedOperation() {
     return this.finishedOperation;
   }
 
-  public setFinishedOperation(flag: boolean){
-    this.finishedOperation = flag
+  public setFinishedOperation(flag: boolean) {
+    this.finishedOperation = flag;
+  }
+  /************************************************************************** */
+  //List of URL in the xlsx file passed by user
+  private original_urls_list = [''];
+
+  public addOriginal_urls_list(item: string) {
+    this.original_urls_list.push(item);
   }
 
-  //List of URL in the xlsx file passed by user
-  original_urls_list = [''];
+  public getOriginal_urls_list() {
+    return this.original_urls_list;
+  }
 
+  public original_urls_listSlice() {
+    this.original_urls_list = this.original_urls_list.slice(1);
+  }
+
+  public original_url_listDeleteItems() {
+    this.original_urls_list = [''];
+  }
+
+  /************************************************************************** */
   //List of Endponits returned by the API
   private endpointsList = [''];
 
@@ -63,10 +79,10 @@ export class MainService {
   public removeFirstItemFromList() {
     this.endpointsList = this.endpointsList.slice(1);
   }
-
+  /************************************************************************** */
   public sendRequestUsingList() {
     this.setExporting(true);
-     this.setFinishedOperation(false);
+    this.setFinishedOperation(false);
     console.log(`********INÌCIO: ${new Date().toString()}`);
     console.log('Gerando endpoints...');
     let json_data = { list_of_endpoints: this.original_urls_list };
@@ -79,7 +95,7 @@ export class MainService {
         this.setExporting(false);
       });
   }
-
+  /************************************************************************** */
   //Sends the endpoints to API to get the blob response to download the .xlsx file
   public sendRequestToEndpoints() {
     //Remove the first null item from the list
@@ -98,13 +114,14 @@ export class MainService {
           //downloads the reponse as a .xlsx file
           this.downloadExcelFile(response, 'response.xlsx');
           console.log(`TIME: ${new Date().toString()}`);
-          if (index == this.getEndpointList().length - 1)
+          if (index == this.getEndpointList().length - 1) {
             this.setDownloading(false);
-            this.setFinishedOperation(true)
+            this.setFinishedOperation(true);
+          }
         });
     });
   }
-
+  /************************************************************************** */
   public sendRequestToEndpointsPromisseAll() {
     //Remove the first null item from the list
     this.removeFirstItemFromList();
@@ -125,7 +142,7 @@ export class MainService {
       this.downloadExcelFile(response, 'response.xlsx');
     });
   }
-
+  /************************************************************************** */
   private downloadExcelFile(data: any, filename: string) {
     const blob = new Blob([data], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

@@ -1,24 +1,53 @@
-<nav class="navbar bg-dark" data-bs-theme="dark">
+<style>
+
+</style>
+<nav
+  class="navbar navbar-expand-lg navbar-dark bg-dark"
+  style="background-color: #1d2840 !important"
+>
   <div class="container-fluid">
-    <a class="navbar-brand">Navbar</a>
-    <form class="d-flex" role="search">
-      <input
-        class="form-control me-2"
-        type="search"
-        placeholder="Search"
-        aria-label="Search"
+    <a class="navbar-brand" href="/">
+      <img
+        src="https://storage.googleapis.com/orbit-logo/ORBIT%20-%20LOGOTIPO%20-%20HORIZONTAL%205.png"
+        width="auto"
+        height="100"
+        alt=""
       />
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="/logout"
+            style="font-weight: bold"
+            >Sair</a
+          >
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 <div
   class="container"
   style="
-    padding-top: 50px;
+
     margin-top: 50px;
     margin-bottom: 50px;
     border-radius: 20px;
+    text-align: center;
   "
 >
   <h1>Orbit Export Comments</h1>
@@ -46,24 +75,19 @@
     Exportar Comentários!
   </button>
 
-  <ng-template [ngIf]="getExporting()"
-    >
+  <ng-template [ngIf]="getExporting()">
     <h4>Exportando....</h4>
     <div class="spinner-border" role="status">
       <span class="sr-only">Loading...</span>
     </div></ng-template
   >
 
-  <ng-template [ngIf]="getDownloading()"
-    >
+  <ng-template [ngIf]="getDownloading()">
     <h4>Fazendo Downloads....</h4>
-    </ng-template
-  >
-  <ng-template [ngIf]="getFinishedOperation()"
-    >
+  </ng-template>
+  <ng-template [ngIf]="getFinishedOperation()">
     <h4>Operação Finalizada!!</h4>
-    </ng-template
-  >
+  </ng-template>
 
   <!-- Button trigger modal -->
 
@@ -111,7 +135,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            Close
+            Ok!
           </button>
         </div>
       </div>

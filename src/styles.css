@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+label,
+h1,
+h2,
+h3 {
+  font-weight: bold;
+  color: darkslategrey;
+}
+
+a {
+  transition: color 0.3s;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #367fbf !important;
+}
+
+li {
+  margin-left: 45px;
+}
