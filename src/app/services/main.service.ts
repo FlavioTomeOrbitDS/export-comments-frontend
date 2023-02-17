@@ -136,10 +136,7 @@ export class MainService {
         });
       })
     ).then((response) => {
-      console.log(response);
-      // handle the response from the endpoint
-      //downloads the reponse as a .xlsx file
-      this.downloadExcelFile(response, 'response.xlsx');
+      response.map((r) => console.log(r));
     });
   }
   /************************************************************************** */

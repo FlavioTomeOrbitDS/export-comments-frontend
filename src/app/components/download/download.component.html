@@ -1,1 +1,24 @@
-<p>download works!</p>
+<div class="container" style="text-align: center; margin-top: 5%;">
+
+  <ng-template [ngIf]="getExporting()">
+    <h3>Exportando....</h3>
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div></ng-template
+  >
+
+  <ng-template [ngIf]="getDownloading()">
+    <h3>Fazendo Downloads....</h3>
+  </ng-template>
+  <ng-template [ngIf]="getFinishedOperation()">
+    <h3 style="margin-bottom: 50px;">Operação Finalizada!!</h3>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="showMainPage()"
+    >
+      Voltar para a tela inicial
+    </button>
+  </ng-template>
+</div>

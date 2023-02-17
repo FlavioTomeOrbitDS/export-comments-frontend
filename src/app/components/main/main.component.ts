@@ -1,5 +1,6 @@
 import { MainService } from './../../services/main.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -8,7 +9,7 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./main.component.css'],
 })
 export class MainComponent implements OnInit {
-  constructor(private mainService: MainService) {
+  constructor(private mainService: MainService, private router: Router) {
     this.mainService.setExporting(false);
   }
 
@@ -18,6 +19,15 @@ export class MainComponent implements OnInit {
   myCloseButton!: ElementRef<HTMLElement>;
 
   modalMessage = '';
+  modalTitle = '';
+
+  fileName = '';
+
+  linksCount = this.mainService.getOriginal_urls_list().length;
+
+  modalLinksList = '';
+
+  filesUploaded = false;
 
   getExporting() {
     return this.mainService.getExporting();
@@ -31,8 +41,9 @@ export class MainComponent implements OnInit {
     return this.mainService.getFinishedOperation();
   }
 
-  showModal(message: string) {
+  showModal(title: string, message: string) {
     this.modalMessage = message;
+    this.modalTitle = title;
     let el: HTMLElement = this.myButton?.nativeElement;
     el.click();
   }
@@ -48,15 +59,18 @@ export class MainComponent implements OnInit {
   //sends the url list main service function that send to the backend and generates the endpoints
   sendRequestUsingList() {
     if (this.mainService.getOriginal_urls_list().length == 1) {
-      this.showModal('Faça o upload da lista de links!!');
+      this.showModal('Atenção', 'Faça o upload da lista de links!!');
     } else {
       this.showModal(
-        'Exportando Comentários! Essa operação pode demorar vários minutos'
+        'Aviso!',
+        'Deseja inciar a exportação?'
       );
-      //this.mainService.setExporting(true);
-      console.log('criando arquivos de download no servidor da api');
-      this.mainService.sendRequestUsingList();
     }
+  }
+
+  showDownloadPage() {
+    this.mainService.sendRequestUsingList();
+    this.router.navigateByUrl('/downloadpage');
   }
 
   //Send the requests to Endpoints List to download the files from API
@@ -68,9 +82,14 @@ export class MainComponent implements OnInit {
   //Open and read the xlsx file to get the url list
   onFileChange(ev: any) {
     /* wire up file reader */
-    this.mainService.original_url_listDeleteItems()
+    this.mainService.original_url_listDeleteItems();
+
     const target: DataTransfer = <DataTransfer>ev.target;
     if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+
+    let file = target.files[0];
+    this.fileName = file.name;
+
     const reader: FileReader = new FileReader();
     reader.onload = (e: any) => {
       /* read workbook */
@@ -91,7 +110,12 @@ export class MainComponent implements OnInit {
       this.mainService.original_urls_listSlice();
       console.log(this.mainService.getOriginal_urls_list());
       let tam = this.mainService.getOriginal_urls_list().length;
-      this.showModal('Foram carregados ' + String(tam ) + ' Links!');
+      this.linksCount = this.mainService.getOriginal_urls_list().length;
+      this.mainService.getOriginal_urls_list().map((link) => {
+        this.modalLinksList = this.modalLinksList + '\n' + link;
+      });
+      this.filesUploaded = true;
+      //this.showModal('Foram carregados ' + String(tam ) + ' Links!');
     };
     reader.readAsBinaryString(target.files[0]);
   }
