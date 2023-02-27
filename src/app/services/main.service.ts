@@ -80,18 +80,43 @@ export class MainService {
     this.endpointsList = this.endpointsList.slice(1);
   }
   /************************************************************************** */
+
+  private endpointsListStatus = [{ url: '', status: '' }];
+  ///private endpointsListStatus : string['url','status'] = []
+
+  public getEndpointsListStatus() {
+    return this.endpointsListStatus;
+  }
+
+  public addEndpointListStatus(endpoint: string, status: string) {
+    this.endpointsListStatus.push({ url: endpoint, status: status });
+  }
+
+  public deleteEndPointsListStatus() {
+    this.endpointsListStatus = [{ url: '', status: '' }];
+  }
+
   public sendRequestUsingList() {
+    //show the 'Exporting...' in frontend
     this.setExporting(true);
+    //flag used to determine whether the process has completed
     this.setFinishedOperation(false);
+    //information logs
     console.log(`********INÌCIO: ${new Date().toString()}`);
     console.log('Gerando endpoints...');
+    //build the json data to send to backend
     let json_data = { list_of_endpoints: this.original_urls_list };
+    //HTTP Post Method
     this.httpClient
       .post<any>(this.url + '/api/generateEndpointsFromList', json_data)
       .subscribe((response) => {
+        //get the list that was returned by the backend
         this.endpointsList = response.download_url_list;
+        this.endpointsList.map((e) => this.addEndpointListStatus(e, '0'));
         console.log('Iniciando Downloads');
+        //send the endpoints to start the download process
         this.sendRequestToEndpoints();
+        //hide the 'Exporting...' in the download page
         this.setExporting(false);
       });
   }
@@ -100,9 +125,9 @@ export class MainService {
   public sendRequestToEndpoints() {
     //Remove the first null item from the list
     this.removeFirstItemFromList();
-    this.getEndpointList().forEach((ep, index) => {
+    this.getEndpointsListStatus().forEach((ep, index) => {
       this.setDownloading(true);
-      let json_data = { endpoint: ep };
+      let json_data = { endpoint: ep.url };
       this.httpClient
         .post(this.url + '/api/downloadfiles', json_data, {
           responseType: 'blob' as 'json',
@@ -110,7 +135,8 @@ export class MainService {
         .subscribe((response) => {
           console.log(response);
           // handle the response from the endpoint
-          console.log('Download Realizado : ' + ep);
+          console.log('Download Realizado : ' + ep.url);
+          ep.status = '1';
           //downloads the reponse as a .xlsx file
           this.downloadExcelFile(response, 'response.xlsx');
           console.log(`TIME: ${new Date().toString()}`);
@@ -151,105 +177,4 @@ export class MainService {
     link.click();
     URL.revokeObjectURL(url);
   }
-
-  // //Iterates with the url list to send each url to backend and return the endpoint to download the file
-  // public generateEndpoints(url_list: string[]) {
-  //   url_list.forEach((url) => {
-  //     //creates the json with the url to send to backend
-  //     const json_data = {
-  //       url: url,
-  //     };
-
-  //     this.httpClient
-  //       .post<Exportlink>(
-  //         'http://localhost:5000/api/generateEndpoints',
-  //         json_data
-  //       )
-  //       .subscribe((response) => {
-  //         //when the backend returns the endpoint, adds it to List
-  //         this.addEndpointsList(String(response.link));
-  //         //console.log(response.link);
-  //       });
-  //   });
-  // }
-
-  // // In the component class
-  // endpoints2 = [
-  //   // 'https://www.youtube.com/watch?v=N15Mdo4V6HI',
-  //   // 'https://www.youtube.com/watch?v=47ZULUxquqo',
-  //   // 'https://www.youtube.com/watch?v=kGGx7Ykuz5s',
-  //   // 'https://www.youtube.com/watch?v=Q6_Ij8KJvmo',
-  //   // 'https://www.youtube.com/watch?v=A5Qp3In7EnY',
-  //   // 'https://www.youtube.com/watch?v=_IflIp664EY',
-  //   // 'https://www.youtube.com/watch?v=p5iSjhZXIks',
-  //   // 'https://www.youtube.com/watch?v=K6KA41Tas8w',
-  //   // 'https://www.youtube.com/watch?v=_DeY6zCSfUs',
-  //   // 'https://www.youtube.com/watch?v=qsVFEw6faK0',
-  //   // 'https://www.youtube.com/watch?v=Xjj4xVsCjP4',
-  //   // 'https://www.youtube.com/watch?v=b-cnpAM2rjU',
-  //   // 'https://www.youtube.com/watch?v=BuB-Dxqgw3c',
-  //   // 'https://www.youtube.com/watch?v=cN27q94RPkQ',
-  //   // 'https://www.youtube.com/watch?v=7n6lCiYVL-w',
-  //   // 'https://www.youtube.com/watch?v=ftRbF_e-kO0',
-  //   // 'https://www.youtube.com/watch?v=0-S52v4rcC8',
-  //   // 'https://www.youtube.com/watch?v=KDhB5-7kTEg',
-  //   // 'https://www.youtube.com/watch?v=bSX9tJjFQbY',
-  //   // 'https://www.youtube.com/watch?v=0XVtdyq2iB0',
-  //   // 'https://www.youtube.com/watch?v=u7sHG3euKlY',
-  //   'https://www.youtube.com/watch?v=jIt2fSwkyAY',
-  //   'https://www.youtube.com/watch?v=P1wXlMQcB74',
-  //   'https://www.youtube.com/watch?v=C8_XPWSV5oo',
-  //   'https://www.youtube.com/watch?v=CHJvqMnjsq8',
-  //   'https://www.youtube.com/watch?v=VI-QIH1dHaM',
-  //   'https://www.youtube.com/watch?v=8yGSw_eF7qw',
-  //   'https://www.youtube.com/watch?v=gmGfP5NvuO4',
-  //   'https://www.youtube.com/watch?v=6SDvKP611Mk',
-  //   'https://www.youtube.com/watch?v=d3lG37K9Lp8',
-  //   'https://www.youtube.com/watch?v=I-Md2XkHd90',
-  //   'https://www.youtube.com/watch?v=p1IIqUZRtkM',
-  //   // 'https://www.youtube.com/watch?v=BEnj8ZaIock',
-  //   // 'https://www.youtube.com/watch?v=qMz2GorEhjo',
-  //   // 'https://www.youtube.com/watch?v=okfYDmgA8fE',
-  //   // 'https://www.youtube.com/watch?v=KAT85FVqINY',
-  //   // 'https://www.youtube.com/watch?v=z5v1SXcvXwE',
-  //   // 'https://www.youtube.com/watch?v=TPRY2sZgBD4',
-  //   // 'https://www.youtube.com/watch?v=qOrlJNf6MZw',
-  //   // 'https://www.youtube.com/watch?v=K6KIa8blGjc',
-  //   // 'https://www.youtube.com/watch?v=4UvHTdbqXYE',
-  //   // 'https://www.youtube.com/watch?v=3SHpc4MYWgY',
-  //   // 'https://www.youtube.com/watch?v=eS4sXDE0xgU',
-  //   // 'https://www.youtube.com/watch?v=aFb1a-m3rYY',
-  //   // 'https://www.youtube.com/watch?v=S-sHCkOXk2M',
-  //   // 'https://www.youtube.com/watch?v=mQMINTVSeLE',
-  //   // 'https://www.youtube.com/watch?v=b03MmguALwk',
-  //   // 'https://www.youtube.com/watch?v=BzcUckwS3q4',
-  //   // 'https://www.youtube.com/watch?v=LT5b1x9fXgs',
-  //   // 'https://www.youtube.com/watch?v=O8BVw3WD4sM',
-  //   // 'https://www.youtube.com/watch?v=F1e_DA_RloY',
-  // ];
-
-  // public sendUsingInterval() {
-  //   let i = 0;
-
-  //   setInterval(() => {
-  //     if (i < this.endpoints2.length) {
-  //       this.sendRequest(this.endpoints2[i]);
-  //       i++;
-  //     }
-  //   }, 1000);
-  // }
-
-  // sendRequest(endpoint: string) {
-  //   let json_data = { url: endpoint };
-  //   this.httpClient
-  //     .post<Exportlink>(
-  //       'http://localhost:5000/api/generateEndpoints',
-  //       json_data
-  //     )
-  //     .subscribe((response) => {
-  //       //when the backend returns the endpoint, adds it to List
-  //       this.addEndpointsList(String(response.link));
-  //       //console.log(response.link);
-  //     });
-  //}
 }

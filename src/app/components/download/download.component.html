@@ -1,30 +1,11 @@
 <div class="container" style="text-align: center; margin-top: 5%">
   <ng-template [ngIf]="getExporting()">
-    <h3>Exportando....</h3>
-    <div class="spinner-border" role="status">
-      <span class="sr-only">Loading...</span>
-    </div></ng-template
-  >
-
-  <table class="table table-sm table-dark">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">URL</th>
-        <th scope="col">STATUS</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-      </tr>
-    </tbody>
-  </table>
-
+    <h3>Gerando os links para download....</h3>
+    <img src="/assets/Loading-Orbit.gif" style="width: 20%" />
+  </ng-template>
   <ng-template [ngIf]="getDownloading()">
     <h3>Fazendo Downloads....</h3>
+    <img src="/assets/Loading-Orbit.gif" style="width: 20%" />
   </ng-template>
   <ng-template [ngIf]="getFinishedOperation()">
     <h3 style="margin-bottom: 50px">Operação Finalizada!!</h3>
@@ -32,5 +13,33 @@
     <button type="button" class="btn btn-primary" (click)="showMainPage()">
       Voltar para a tela inicial
     </button>
+  </ng-template>
+
+  <p></p>
+  <ng-template [ngIf]="!getExporting()">
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Link</th>
+          <th scope="col">Download Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of getEndpointsListStatus()">
+          <td>{{ e.url }}</td>
+
+          <ng-template [ngIf]="e.status == '0'">
+            <td>
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </td>
+          </ng-template>
+          <ng-template [ngIf]="e.status == '1'">
+            <td><i class="bi bi-check"></i></td>
+          </ng-template>
+        </tr>
+      </tbody>
+    </table>
   </ng-template>
 </div>

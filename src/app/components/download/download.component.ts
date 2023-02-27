@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./download.component.css'],
 })
 export class DownloadComponent implements OnInit {
-  constructor(private mainService: MainService, private router : Router) {}
+  constructor(private mainService: MainService, private router: Router) {}
 
   getExporting() {
     return this.mainService.getExporting();
@@ -22,8 +22,16 @@ export class DownloadComponent implements OnInit {
     return this.mainService.getFinishedOperation();
   }
 
-  showMainPage(){
-    this.router.navigateByUrl('/')
+  getEndpointsList() {
+    return this.mainService.getEndpointList();
+  }
+
+  getEndpointsListStatus(){
+    return this.mainService.getEndpointsListStatus()
+  }
+  showMainPage() {
+    this.mainService.original_url_listDeleteItems();
+    this.router.navigateByUrl('/');
   }
 
   ngOnInit(): void {}
