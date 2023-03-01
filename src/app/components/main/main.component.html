@@ -24,14 +24,14 @@
     class="btn btn-primary"
     onclick="document.getElementById('upload_input').click()"
   >
-    Upload de lista
+    Upload
   </button>
   <p></p>
-  <ng-template [ngIf]="linksCount > 1">
+  <ng-template [ngIf]="getLinkCount() >= 1">
     <h3>
       Foram carregados
       <a (click)="showModal('Links', modalLinksList)">
-        {{ linksCount }} Links</a
+        {{ getLinkCount() }} Links</a
       >
     </h3>
   </ng-template>
@@ -50,7 +50,7 @@
       class="btn btn-primary"
       (click)="sendRequestUsingList()"
     >
-      Exportar Comentários!
+      Exportar Comentários
     </button>
   </ng-template>
 
@@ -119,31 +119,6 @@
   <br />
 
 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">Link</th>
-        <th scope="col">Download Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>exportcomments.com/facebook.444566464dfsdf</td>
-        <td>
-          <div
-            class="spinner-border ml-auto"
-            role="status"
-            aria-hidden="true"
-          ></div>
-        </td>
-      </tr>
-      <tr>
-        <td>exportcomments.com/facebook.444566464dfsdf</td>
 
-        <td style="display: flex">
-          <i class="bi bi-check" style="height: 50%"></i>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+
 </div>

@@ -23,7 +23,11 @@ export class MainComponent implements OnInit {
 
   fileName = '';
 
-  linksCount = this.mainService.getOriginal_urls_list().length;
+  getLinkCount(){
+    return this.mainService.getOriginal_urls_list().length;
+  }
+
+
 
   modalLinksList = '';
 
@@ -66,6 +70,7 @@ export class MainComponent implements OnInit {
         'Deseja inciar a exportação?'
       );
     }
+    //this.mainService.getBlob()
   }
 
   showDownloadPage() {
@@ -83,6 +88,7 @@ export class MainComponent implements OnInit {
   onFileChange(ev: any) {
     /* wire up file reader */
     this.mainService.original_url_listDeleteItems();
+    this.modalLinksList = ''
 
     const target: DataTransfer = <DataTransfer>ev.target;
     if (target.files.length !== 1) throw new Error('Cannot use multiple files');
@@ -107,10 +113,10 @@ export class MainComponent implements OnInit {
         let item_str = String(item);
         if (item_str != '') this.mainService.addOriginal_urls_list(item_str);
       });
+
       this.mainService.original_urls_listSlice();
-      console.log(this.mainService.getOriginal_urls_list());
-      let tam = this.mainService.getOriginal_urls_list().length;
-      this.linksCount = this.mainService.getOriginal_urls_list().length;
+      //console.log(this.mainService.getOriginal_urls_list());
+
       this.mainService.getOriginal_urls_list().map((link) => {
         this.modalLinksList = this.modalLinksList + '\n' + link;
       });

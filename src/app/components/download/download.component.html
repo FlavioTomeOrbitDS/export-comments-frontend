@@ -20,13 +20,15 @@
     <table class="table table-striped">
       <thead class="thead-dark">
         <tr>
-          <th scope="col">Link</th>
+          <th scope="col">Original Link</th>
+          <th scope="col">Download Link</th>
           <th scope="col">Download Status</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let e of getEndpointsListStatus()">
-          <td>{{ e.url }}</td>
+          <td>{{ e.original_url }}</td>
+          <td>{{ e.endpoint }}</td>
 
           <ng-template [ngIf]="e.status == '0'">
             <td>
@@ -36,7 +38,16 @@
             </td>
           </ng-template>
           <ng-template [ngIf]="e.status == '1'">
-            <td><i class="bi bi-check"></i></td>
+            <td>
+              <h3><i class="bi bi-check" style="color: green"></i></h3>
+            </td>
+          </ng-template>
+          <ng-template [ngIf]="e.status == '2'">
+            <td>
+              <h3>
+                <i class="bi bi-exclamation-circle" style="color: red"></i>
+              </h3>
+            </td>
           </ng-template>
         </tr>
       </tbody>
