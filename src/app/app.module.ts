@@ -8,13 +8,18 @@ import { MainComponent } from './components/main/main.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DownloadComponent } from './components/download/download.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './components/login/login.component';
+import { HeaderComponent } from './components/header/header.component';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
-    DownloadComponent
+    DownloadComponent,
+    LoginComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

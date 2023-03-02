@@ -1,0 +1,39 @@
+<div class="container" style="text-align: left">
+  <h2>Bem Vindo!</h2>
+  <form>
+    <!-- Email input -->
+    <label class="form-label" for="form2Example1">Login</label>
+    <div class="form-outline mb-4">
+      <input
+        type="email"
+        id="form2Example1"
+        name="user_input"
+        class="form-control"
+        [(ngModel)]="user"
+        required
+      />
+    </div>
+
+    <!-- Password input -->
+    <label class="form-label" for="form2Example2">Password</label>
+    <div class="form-outline mb-4">
+      <input
+        type="password"
+        id="form2Example2"
+        name="passord_input"
+        class="form-control"
+        [(ngModel)]="password"
+        required
+      />
+    </div>
+
+    <!-- Submit button -->
+    <button
+      type="button"
+      class="btn btn-primary btn-block mb-4"
+      (click)="login()"
+    >
+      Entrar
+    </button>
+  </form>
+</div>
