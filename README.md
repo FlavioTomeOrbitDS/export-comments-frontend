@@ -1,27 +1,42 @@
-# ExportComments
+## Orbit Export Comments Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.1.
+## Descrição do Projeto:
+---
 
-## Development server
+O Orbit Export Comments é um web app que se recebe uma lista no formato .xlsx do usuário e utiliza a API Export Comments para extrair os comentários de cada link de rede social informado.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+O frontend deste projeto foi gerado utilizando o Angular CLI na versão 13.3.1.
 
-## Code scaffolding
+O site gerado pelo projeto possui 3 páginas:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+1. A página de login, na qual o login é feito por meio de um usuário jpreviamente cadastrado.
+2. A página principal consiste em um text input botão para que o usuário realize o upload de um arquivo no formato .xlsx contento uma lista de urls de redes sociais das quais serão exportados os comentários. Assim que o usuário faz o upload do arquivo, um botão para iniciar o processo de exportação é mostrado ao usuário.
+3. A terceira e última página é mostrada assim que o usuário inicia a operação de exportação. Essa página mostra o status dos downloads e informa quando a operação é finalizada, mostrando um botão para que o usuário retorne à página principal.
 
-## Build
+## Instalação e Configuração
+---
+### Pré-requisitos
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Para executar este projeto, é necessário ter o seguinte software instalado em sua máquina:
 
-## Running unit tests
+* Node.js (v14.18.1 ou superior)
+* Angular CLI (v13.0.4 ou superior)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Instalação
+1. Clone o repositório do projeto no seu computador.
+```
+  git clone https://github.com/FlavioTomeOrbitDS/export-comments-frontend
+```
 
-## Running end-to-end tests
+2. Abra o terminal ou prompt de comando e navegue até o diretório raiz do projeto.
+```
+ ...\export-comments-frontend>
+```
+3. Execute o comando npm install para instalar todas as dependências do projeto.
+```
+ ...\export-comments-frontend>npm install
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Executando o projeto
+---
+Para executar o projeto, execute o comando ng serve na raiz do projeto. Em seguida, abra o navegador e acesse http://localhost:4200/ para visualizar a página de login.

@@ -12,8 +12,8 @@ export class MainService {
   /*Backend Links */
 
   //url = 'https://pfizer-pulse.rj.r.appspot.com';
-  //url = 'https://export-comments-backend-nylbyrwc2q-uc.a.run.app';
-  url = 'http://127.0.0.1:5000';
+  url = 'https://export-comments-backend-nylbyrwc2q-uc.a.run.app';
+  //url = 'http://127.0.0.1:5000';
 
   /*The variables 'exporting', 'downloading'and 'finishedOperation'
    are used to show and hide the banner of informations in the

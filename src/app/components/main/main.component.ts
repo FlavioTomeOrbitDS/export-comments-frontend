@@ -130,5 +130,7 @@ export class MainComponent implements OnInit {
     //this.mainService.test()
     this.mainService.sendRequestUsingList();
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.mainService.original_url_listDeleteItems()
+  }
 }
