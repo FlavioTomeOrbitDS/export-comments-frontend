@@ -13,6 +13,17 @@ O site gerado pelo projeto possui 3 páginas:
   2. A página principal consiste em um text input botão para que o usuário realize o upload de um arquivo no formato .xlsx contento uma lista de urls de redes sociais das quais serão exportados os comentários. Assim que o usuário faz o upload do arquivo, um botão para iniciar o processo de exportação é mostrado ao usuário.
   3. A terceira e última página é mostrada assim que o usuário inicia a operação de exportação. Essa página mostra o status dos downloads e informa quando a operação é finalizada, mostrando um botão para que o usuário retorne à página principal.
 
+## Páginas da Aplicação
+---
+### Login page:
+![Login Export Comments](https://user-images.githubusercontent.com/115179333/226722490-5d4ff1b1-21cd-4a5f-87b7-78140e36089c.png)
+
+### Index Page:
+![Index Export Commentspng](https://user-images.githubusercontent.com/115179333/226722701-543d2bbf-7a11-4c3d-b00e-4aacfd1925ec.png)
+
+### Exporting Page:
+![exporting](https://user-images.githubusercontent.com/115179333/226722809-26ab4162-05ca-4cfc-b44f-02f11ec4ea3c.png)
+
 ## Instalação e Configuração
 ---
 ### Pré-requisitos
