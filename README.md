@@ -22,7 +22,10 @@ O site gerado pelo projeto possui 3 páginas:
 ![Index Export Commentspng](https://user-images.githubusercontent.com/115179333/226722701-543d2bbf-7a11-4c3d-b00e-4aacfd1925ec.png)
 
 ### Exporting Page:
+1. Fazendo Download:
 ![exporting](https://user-images.githubusercontent.com/115179333/226722809-26ab4162-05ca-4cfc-b44f-02f11ec4ea3c.png)
+2. Download Finalizado:
+![exported](https://user-images.githubusercontent.com/115179333/226726119-028830c4-453f-4c13-8f53-f5feb3a6ce3b.png)
 
 ## Instalação e Configuração
 ---
